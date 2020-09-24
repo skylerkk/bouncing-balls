@@ -2,6 +2,8 @@
 const para = document.getElementById('countBall');
 const player1Score = document.getElementById('player1Score');
 const badScore = document.getElementById('badScore');
+const player1Image = document.getElementById('player1Image');
+const badImage = document.getElementById('badImage');
 let count = 0;
 let Score1 = 0;
 let Score2 = 0;
@@ -106,11 +108,12 @@ class EvilCircle extends Shape {
         yValue = y;
     }
     draw() {
-        ctx.beginPath();
+        /*ctx.beginPath();
         ctx.strokeStyle = this.color;
         ctx.lineWidth = 3;
         ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
-        ctx.stroke();
+        ctx.stroke();*/
+        ctx.drawImage(player1Image, (this.x - 20), (this.y - 20) );
     }
     checkBounds() {
         if ((this.x + this.size) >= width) {
@@ -193,11 +196,12 @@ class badCircle extends Shape {
         badY = y;
     }
     draw() {
-        ctx.beginPath();
+       /* ctx.beginPath();
         ctx.strokeStyle = this.color;
         ctx.lineWidth = 3;
         ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
-        ctx.stroke();
+        ctx.stroke();*/
+        ctx.drawImage(badImage, (this.x - 20), (this.y - 20) );
     }
     checkBounds() {
         if ((this.x + this.size) >= width) {
