@@ -1,6 +1,9 @@
 // setup canvas
-const para = document.querySelector('p');
+const para = document.getElementById('countBall');
+const player1Score = document.getElementById('player1Score');
+const player2Score = document.getElementById('player2Score');
 let count = 0;
+let Score1 = 0;
 
 const canvas = document.querySelector('canvas');
 const ctx = canvas.getContext('2d');
@@ -45,19 +48,19 @@ class Ball extends Shape{
 
     update () {
         if ((this.x + this.size) >= width) {
-            this.velX = -(this.velX);
+            this.x = (width - width + this.size+ 1);;
         }
     
         if ((this.x - this.size) <= 0) {
-            this.velX = -(this.velX);
+            this.x= (width - this.size + 1);
         }
     
         if ((this.y + this.size) >= height) {
-            this.velY = -(this.velY);
+            this.y = (height-height + this.size +1);
         }
     
         if ((this.y - this.size) <= 0) {
-            this.velY = -(this.velY);
+            this.y = (height- this.size +1);
         }
     
         this.x += this.velX;
@@ -73,6 +76,7 @@ class Ball extends Shape{
     
                 if (distance < this.size + balls[j].size) {
                     balls[j].color = this.color = 'rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ')';
+                    balls[j].size = this.size = random(10, 20);
                 }
             }
         }
@@ -85,11 +89,13 @@ Ball.prototype.constructor = Ball;
 // Defining EvilCircle()
 
 class EvilCircle extends Shape{
-    constructor (x, y, velX, velY, exists, color, size) {
+    constructor (x, y, velX, velY, exists, color, size, score , player) {
     super(x, y, 20, 20, exists);
 
     this.color = "white";
     this.size = 10;
+    this.score = 0;
+    this.player = player;
     }
     draw() {
         ctx.beginPath();
@@ -139,7 +145,9 @@ class EvilCircle extends Shape{
                 if (distance < this.size + balls[j].size) {
                     balls[j].exists = false;
                     count--;
+                    Score1++;
                     para.textContent = "Ball count: " + count;
+                    player1Score.textContent = "Player 1: " + Score1;
                 }
             }
         }
@@ -166,11 +174,12 @@ while (balls.length < 25) {
     balls.push(ball);
     count++;
     para.textContent = 'Ball count: ' + count;
+    player1Score.textContent = 'Player 1: ' + Score1;
 }
 
 // define loop that keeps drawing the scene constantly
 
-let evil = new EvilCircle(random(0, width), random(0, height), true);
+let evil = new EvilCircle(random(0, width), random(0, height), true, 1);
 evil.setControls();
 
 function loop() {

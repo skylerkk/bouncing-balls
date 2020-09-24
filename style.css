@@ -24,10 +24,26 @@ h1 {
   text-shadow: 0 0 4px white;
 }
 
-p {
+#countBall {
   position: absolute;
   margin: 0;
   top: 35px;
+  right: 5px;
+  color: #aaa;
+}
+
+#player1Score {
+  position: absolute;
+  margin: 0;
+  top: 50px;
+  right: 5px;
+  color: #aaa;
+}
+
+#player2Score {
+  position: absolute;
+  margin: 0;
+  top: 65px;
   right: 5px;
   color: #aaa;
 }
