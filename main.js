@@ -114,19 +114,23 @@ class EvilCircle extends Shape {
     }
     checkBounds() {
         if ((this.x + this.size) >= width) {
-            this.x -= (this.size);
+            xValue = (width - width + this.size + 1);
+            this.x = xValue;
         }
 
         if ((this.x - this.size) <= 0) {
-            this.x += (this.size);
+            xValue = (width - this.size + 1);
+            this.x = xValue;
         }
 
         if ((this.y + this.size) >= height) {
-            this.y -= (this.size);
+            yValue = (height - height + this.size + 1);
+            this.y = yValue;
         }
 
         if ((this.y - this.size) <= 0) {
-            this.y += (this.size);
+            yValue = (height - this.size + 1)
+            this.y = yValue;
         }
     }
     setControls() {
@@ -197,19 +201,23 @@ class badCircle extends Shape {
     }
     checkBounds() {
         if ((this.x + this.size) >= width) {
-            this.x -= (this.size);
+            badX = (width - width + this.size + 1);
+            this.x = badX;
         }
 
         if ((this.x - this.size) <= 0) {
-            this.x += (this.size);
+            badX = (width - this.size + 1);
+            this.x = badX;
         }
 
         if ((this.y + this.size) >= height) {
-            this.y -= (this.size);
+            badY = (height - height + this.size + 1);
+            this.y = badY;
         }
 
         if ((this.y - this.size) <= 0) {
-            this.y += (this.size);
+            badY = (height - this.size + 1)
+            this.y = badY;
         }
     }
     setControls() {
