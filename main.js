@@ -1,42 +1,38 @@
 // setup canvas
 const para = document.getElementById('countBall');
 const player1Score = document.getElementById('player1Score');
-const badScore = document.getElementById('badScore');
+const player2Score = document.getElementById('badScore');
 const player1Image = document.getElementById('player1Image');
-const badImage = document.getElementById('badImage');
+const player2Image = document.getElementById('badImage');
 const alienImage = document.getElementById('alienImage');
 const player1Win = document.getElementById('player1Win');
 const player2Win = document.getElementById('player2Win');
 const tie = document.getElementById('tie');
 const player1Solo = document.getElementById('player1Solo');
+
+// Set variables
 let count = 0;
-let Score1 = 0;
-let Score2 = 0;
 let alienWidth = 64;
 let alienHeight = 55;
 let gameEnd = false;
 let players;
 
+
+//Makes 2 objects that have up, down, right, left and set them to false.
 let key = { up: false, left: false, right: false, down: false };
 let bad = { up: false, left: false, right: false, down: false };
 
+//creates varibles for the canvas and makes it 2d also sets width and height to the windows size
 const canvas = document.querySelector('canvas');
 const ctx = canvas.getContext('2d');
-
 const width = canvas.width = window.innerWidth;
 const height = canvas.height = window.innerHeight;
-let xValue = 0;
-let yValue = 0;
-let badX = 0;
-let badY = 0;
-// function to generate random number
 
+// function to generate random number
 function random(min, max) {
     const num = Math.floor(Math.random() * (max - min + 1)) + min;
     return num;
 }
-
-
 
 // define Shape constructor
 class Shape {
@@ -67,7 +63,7 @@ class Ball extends Shape {
 
     update() {
         if ((this.x + this.size) >= width) {
-            this.x = (width - width + this.size + 1);;
+            this.x = (width - width + this.size + 1);
         }
 
         if ((this.x - this.size) <= 0) {
@@ -81,7 +77,7 @@ class Ball extends Shape {
         if ((this.y - this.size) <= 0) {
             this.y = (height - this.size + 1);
         }
-        if (this.velX === 0 || this.velY === 0){
+        if (this.velX === 0 || this.velY === 0) {
             this.velX = 1;
             this.velY = 1;
         }
@@ -105,79 +101,100 @@ class Ball extends Shape {
     };
 }
 
-    Ball.prototype = Object.create(Shape.prototype);
-    Ball.prototype.constructor = Ball;
 
 // Defining EvilCircle()
 
-class EvilCircle extends Shape {
-    constructor(x, y, velX, velY, exists, color, size, score) {
-        super(x, y, 2, 2, exists);
-
+class Player extends Shape {
+    constructor(x, y, score, player) {
+        super(x, y, 3, 3);
         this.color = "#ffffff00";
         this.size = 25;
         this.score = 0;
-        xValue = x;
-        yValue = y;
+        this.exists = true;
+        this.player = player;
     }
     draw() {
-        ctx.drawImage(player1Image, (this.x - 20), (this.y - 20) );
+        if (this.player === 1) {
+            ctx.drawImage(player1Image, (this.x - 20), (this.y - 20));
+        }
+        else {
+            ctx.drawImage(player2Image, (this.x - 20), (this.y - 20));
+        }
         ctx.beginPath();
         ctx.strokeStyle = this.color;
         ctx.lineWidth = 3;
-        ctx.arc(this.x + 4, this.y+6, this.size, 0, 2 * Math.PI);
+        ctx.arc(this.x + 4, this.y + 6, this.size, 0, 2 * Math.PI);
         ctx.stroke();
     }
     checkBounds() {
         if ((this.x + this.size) >= width) {
-            xValue = (width - width + this.size + 1);
-            this.x = xValue;
+            this.x = (width - width + this.size + 1);
         }
-
         if ((this.x - this.size) <= 0) {
-            xValue = (width - this.size + 1);
-            this.x = xValue;
+            this.x = (width - this.size + 1);
         }
-
         if ((this.y + this.size) >= height) {
-            yValue = (height - height + this.size + 1);
-            this.y = yValue;
+            this.y = (height - height + this.size + 1);
         }
-
         if ((this.y - this.size) <= 0) {
-            yValue = (height - this.size + 1)
-            this.y = yValue;
+            this.y = (height - this.size + 1)
         }
     }
     setControls() {
-        var _this = this;
-        if (key.left === true) {
-            xValue -= this.velX;
+        if (this.player === 1) {
+            var _this = this;
+            if (key.left === true) {
+                this.x -= this.velX;
+            }
+            else {
+                this.x += this.velX;
+            }
+            if (key.right === true) {
+                this.x += this.velX;
+            }
+            else {
+                this.x -= this.velX;
+            }
+            if (key.up === true) {
+                this.y -= this.velY;
+            }
+            else {
+                this.y += this.velY;
+            }
+            if (key.down === true) {
+                this.y += this.velY;
+            }
+            else {
+                this.y -= this.velY;
+            }
         }
         else {
-            xValue += this.velX;
+            var _this = this;
+            if (bad.left === true) {
+                this.x -= this.velX;
+            }
+            else {
+                this.x += this.velX;
+            }
+            if (bad.right === true) {
+                this.x += this.velX;
+            }
+            else {
+                this.x -= this.velX;
+            }
+            if (bad.up === true) {
+                this.y -= this.velY;
+            }
+            else {
+                this.y += this.velY;
+            }
+            if (bad.down === true) {
+                this.y += this.velY;
+            }
+            else {
+                this.y -= this.velY;
+            }
         }
-        if (key.right === true) {
-            xValue += this.velX;
-        }
-        else {
-            xValue -= this.velX;
-        }
-        if (key.up === true) {
-            yValue -= this.velY;
-        }
-        else {
-            yValue += this.velY;
-        }
-        if (key.down === true) {
-            yValue += this.velY;
-        }
-        else {
-            yValue -= this.velY;
-        }
-        this.x = xValue;
-        this.y = yValue;
-
     }
     collisionDetect() {
         for (let j = 0; j < balls.length; j++) {
@@ -189,105 +206,28 @@ class EvilCircle extends Shape {
                 if (distance < this.size + balls[j].size) {
                     balls[j].exists = false;
                     count--;
-                    Score1++;
-                    para.textContent = "Alien count: " + count;
-                    player1Score.textContent = "Player 1: " + Score1;
+                    this.score++;
+                    para.textContent = "Ball count: " + count;
+                    if (this.player === 1) {
+                        player1Score.textContent = "Player " + this.player + ": " + this.score;
+                    }
+                    if (this.player === 2) {
+                        player2Score.textContent = "Player " + this.player + ": " + this.score;
+                    }
                 }
             }
         }
     }
 }
 
-class badCircle extends Shape {
-    constructor(x, y, velX, velY, exists, color, size, score) {
-        super(x, y, 2, 2, exists);
-
-        this.color = "ffffff00";
-        this.size = 28;
-        this.score = 0;
-        badX = x;
-        badY = y;
-    }
-    draw() {
-        ctx.drawImage(badImage, (this.x - 20), (this.y - 20) );
-        ctx.beginPath();
-        ctx.strokeStyle = this.color;
-        ctx.lineWidth = 3;
-        ctx.arc(this.x + 12, this.y+8, this.size, 0, 2 * Math.PI);
-        ctx.stroke();
-    }
-    checkBounds() {
-        if ((this.x + this.size) >= width) {
-            badX = (width - width + this.size + 1);
-            this.x = badX;
-        }
-
-        if ((this.x - this.size) <= 0) {
-            badX = (width - this.size + 1);
-            this.x = badX;
-        }
-
-        if ((this.y + this.size) >= height) {
-            badY = (height - height + this.size + 1);
-            this.y = badY;
-        }
-
-        if ((this.y - this.size) <= 0) {
-            badY = (height - this.size + 1)
-            this.y = badY;
-        }
-    }
-    setControls() {
-        var _this = this;
-        if (bad.left === true) {
-            badX -= this.velX;
-        }
-        else {
-            badX += this.velX;
-        }
-        if (bad.right === true) {
-            badX += this.velX;
-        }
-        else {
-            badX -= this.velX;
-        }
-        if (bad.up === true) {
-            badY -= this.velY;
-        }
-        else {
-            badY += this.velY;
-        }
-        if (bad.down === true) {
-            badY += this.velY;
-        }
-        else {
-            badY -= this.velY;
-        }
-        this.x = badX;
-        this.y = badY;
-
-    }
-    collisionDetect() {
-        for (let j = 0; j < balls.length; j++) {
-            if (balls[j].exists) {
-                const dx = this.x - balls[j].x;
-                const dy = this.y - balls[j].y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
-
-                if (distance < this.size + balls[j].size) {
-                    balls[j].exists = false;
-                    count--;
-                    Score2++;
-                    para.textContent = "Alien count: " + count;
-                    badScore.textContent = "Player 2: " + Score2;
-                }
-            }
-        }
-    }
-}
 // define array to store balls and populate it
 
 const balls = [];
+
+let player1 = new Player(random(0, width), random(0, height), 0, 1);
+player1.setControls();
+const player2 = new Player(random(0, width), random(0, height), 0, 2);
+player2.setControls();
 
 while (balls.length < 30) {
     const size = random(10, 20);
@@ -305,32 +245,16 @@ while (balls.length < 30) {
     balls.push(ball);
     count++;
     para.textContent = 'Ball count: ' + count;
-    player1Score.textContent = 'Player 1: ' + Score1;
-    badScore.textContent = 'Player 2: ' + Score2;
+    player1Score.textContent = 'Player 1: ' + player1.score;
+    player2Score.textContent = 'Player 2: ' + player2.score;
 }
 
 // define loop that keeps drawing the scene constantly
 function getPlayers() {
-   players  =  window.prompt("Greetings Commander! 1 or 2 Players? Default will be 1 Player.","1");
-    if (players === "2"){
-        let evil = new EvilCircle(random(0, width), random(0, height), true, 1);
-        evil.setControls();
-        let badGuy = new badCircle(random(0, width), random(0, height), true, 1);
-        badGuy.setControls();
-    }
-    else {
-        let evil = new EvilCircle(random(0, width), random(0, height), true, 1);
-        evil.setControls(); 
-    }
+    players = window.prompt("Greetings Commander! 1 or 2 Players? Default will be 1 Player.", "1");
 }
 
-
 getPlayers();
-
-let evil = new EvilCircle(random(0, width), random(0, height), true, 1);
-evil.setControls();
-let badGuy = new badCircle(random(0, width), random(0, height), true, 1);
-badGuy.setControls();
 
 function loop() {
     ctx.fillStyle = 'rgba(0,0,0,0.25)';
@@ -344,32 +268,26 @@ function loop() {
             balls[i].collisionDetect();
         }
     }
-    if (players === "2"){
-        evil.draw();
-        badGuy.draw();
-        evil.setControls();
-        badGuy.setControls();
-        evil.checkBounds();
-        badGuy.checkBounds();
-        evil.collisionDetect();
-        badGuy.collisionDetect();
+    if (players === "2") {
+        player2.draw();
+        player2.setControls();
+        player2.checkBounds();
+        player2.collisionDetect();
     }
-    else{
-        evil.draw(); 
-        evil.setControls();
-        evil.checkBounds();
-        evil.collisionDetect();
-    }
+        player1.draw();
+        player1.setControls();
+        player1.checkBounds();
+        player1.collisionDetect();
 
-    if (count === 0 && gameEnd === false){
-        if (players === "2"){
-            if (Score1 > Score2){
+    if (count === 0 && gameEnd === false) {
+        if (players === "2") {
+            if (player1.score > player2.score) {
                 player1Win.style.display = "block";
             }
-            else if (Score2 > Score1){
+            else if (player2.score > player1.score) {
                 player2Win.style.display = "block";
             }
-            else{
+            else {
                 tie.style.display = "block";
             }
         }
@@ -379,7 +297,7 @@ function loop() {
         gameEnd = true;
     }
     requestAnimationFrame(loop);
-    
+
 }
 
 
@@ -388,10 +306,10 @@ window.onkeydown = function (e) {
     if (e.keyCode == 87) { key.up = true; } //UP
     if (e.keyCode == 68) { key.right = true; } //RIGHT
     if (e.keyCode == 83) { key.down = true; } //DOWN
-    if (e.keyCode == 38) { bad.up = true; }
-    if (e.keyCode == 37) { bad.left = true;}
-    if (e.keyCode == 40) { bad.down = true;}
-    if (e.keyCode == 39) { bad.right = true;}
+    if (e.keyCode == 38) { bad.up = true; } //UP
+    if (e.keyCode == 37) { bad.left = true; } //LEFT
+    if (e.keyCode == 40) { bad.down = true; } //DOWN
+    if (e.keyCode == 39) { bad.right = true; } //RIGHT
 
 };
 window.onkeyup = function (e) {
@@ -399,9 +317,9 @@ window.onkeyup = function (e) {
     if (e.keyCode == 87) { key.up = false; } //UP
     if (e.keyCode == 68) { key.right = false; } //RIGHT
     if (e.keyCode == 83) { key.down = false; } //DOWN
-    if (e.keyCode == 38) { bad.up = false; }
-    if (e.keyCode == 37) { bad.left = false;}
-    if (e.keyCode == 40) { bad.down = false;}
-    if (e.keyCode == 39) { bad.right = false;}
+    if (e.keyCode == 38) { bad.up = false; } //UP
+    if (e.keyCode == 37) { bad.left = false; } //LEFT
+    if (e.keyCode == 40) { bad.down = false; } //DOWN
+    if (e.keyCode == 39) { bad.right = false; } //RIGHT
 };
 loop();
