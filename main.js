@@ -190,7 +190,7 @@ class EvilCircle extends Shape {
                     balls[j].exists = false;
                     count--;
                     Score1++;
-                    para.textContent = "Ball count: " + count;
+                    para.textContent = "Alien count: " + count;
                     player1Score.textContent = "Player 1: " + Score1;
                 }
             }
@@ -278,7 +278,7 @@ class badCircle extends Shape {
                     balls[j].exists = false;
                     count--;
                     Score2++;
-                    para.textContent = "Ball count: " + count;
+                    para.textContent = "Alien count: " + count;
                     badScore.textContent = "Player 2: " + Score2;
                 }
             }
