@@ -4,9 +4,12 @@ const player1Score = document.getElementById('player1Score');
 const badScore = document.getElementById('badScore');
 const player1Image = document.getElementById('player1Image');
 const badImage = document.getElementById('badImage');
+const alienImage = document.getElementById('alienImage');
 let count = 0;
 let Score1 = 0;
 let Score2 = 0;
+let alienWidth = 64;
+let alienHeight = 55;
 
 let key = { up: false, left: false, right: false, down: false };
 let bad = { up: false, left: false, right: false, down: false };
@@ -45,13 +48,14 @@ class Ball extends Shape {
     constructor(x, y, velX, velY, exists, color, size) {
         super(x, y, velX, velY, exists);
 
-        this.color = color;
+        this.color = "ffffff00";
         this.size = size;
     }
     draw() {
+        ctx.drawImage(alienImage, (this.x), (this.y), alienWidth, alienHeight);
         ctx.beginPath();
         ctx.fillStyle = this.color;
-        ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
+        ctx.arc((this.x + 32), (this.y + 24), this.size, 0, 2 * Math.PI);
         ctx.fill();
     };
 
@@ -84,7 +88,7 @@ class Ball extends Shape {
                 const distance = Math.sqrt(dx * dx + dy * dy);
 
                 if (distance < this.size + balls[j].size && this.exists) {
-                    balls[j].color = this.color = 'rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ')';
+                    //balls[j].color = this.color = 'rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ')';
                     balls[j].size = this.size = random(10, 20);
                 }
             }
@@ -101,19 +105,19 @@ class EvilCircle extends Shape {
     constructor(x, y, velX, velY, exists, color, size, score) {
         super(x, y, 2, 2, exists);
 
-        this.color = "white";
-        this.size = 10;
+        this.color = "#ffffff00";
+        this.size = 25;
         this.score = 0;
         xValue = x;
         yValue = y;
     }
     draw() {
-        /*ctx.beginPath();
+        ctx.drawImage(player1Image, (this.x - 20), (this.y - 20) );
+        ctx.beginPath();
         ctx.strokeStyle = this.color;
         ctx.lineWidth = 3;
-        ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
-        ctx.stroke();*/
-        ctx.drawImage(player1Image, (this.x - 20), (this.y - 20) );
+        ctx.arc(this.x + 4, this.y+6, this.size, 0, 2 * Math.PI);
+        ctx.stroke();
     }
     checkBounds() {
         if ((this.x + this.size) >= width) {
@@ -189,19 +193,19 @@ class badCircle extends Shape {
     constructor(x, y, velX, velY, exists, color, size, score) {
         super(x, y, 2, 2, exists);
 
-        this.color = "red";
-        this.size = 10;
+        this.color = "ffffff00";
+        this.size = 28;
         this.score = 0;
         badX = x;
         badY = y;
     }
     draw() {
-       /* ctx.beginPath();
+        ctx.drawImage(badImage, (this.x - 20), (this.y - 20) );
+        ctx.beginPath();
         ctx.strokeStyle = this.color;
         ctx.lineWidth = 3;
-        ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
-        ctx.stroke();*/
-        ctx.drawImage(badImage, (this.x - 20), (this.y - 20) );
+        ctx.arc(this.x + 12, this.y+8, this.size, 0, 2 * Math.PI);
+        ctx.stroke();
     }
     checkBounds() {
         if ((this.x + this.size) >= width) {
@@ -283,8 +287,8 @@ while (balls.length < 25) {
         // away from the adge of the canvas, to avoid drawing errors
         random(0 + size, width - size),
         random(0 + size, height - size),
-        random(-7, 7),
-        random(-7, 7),
+        random(-5, 5),
+        random(-5, 5),
         true,
         'rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ')',
         size
