@@ -270,7 +270,7 @@ class badCircle extends Shape {
                     count--;
                     Score2++;
                     para.textContent = "Ball count: " + count;
-                    badScore.textContent = "Bad guy: " + Score2;
+                    badScore.textContent = "Player 2: " + Score2;
                 }
             }
         }
@@ -297,7 +297,7 @@ while (balls.length < 25) {
     count++;
     para.textContent = 'Ball count: ' + count;
     player1Score.textContent = 'Player 1: ' + Score1;
-    badScore.textContent = 'Bad guy: ' + Score2;
+    badScore.textContent = 'Player 2: ' + Score2;
 }
 
 // define loop that keeps drawing the scene constantly
