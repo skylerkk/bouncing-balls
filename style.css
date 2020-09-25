@@ -47,3 +47,7 @@ h1 {
   right: 5px;
   color: #aaa;
 }
+
+.alert {
+  margin-bottom: -10px;
+}

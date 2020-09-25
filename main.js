@@ -5,11 +5,17 @@ const badScore = document.getElementById('badScore');
 const player1Image = document.getElementById('player1Image');
 const badImage = document.getElementById('badImage');
 const alienImage = document.getElementById('alienImage');
+const player1Win = document.getElementById('player1Win');
+const player2Win = document.getElementById('player2Win');
+const tie = document.getElementById('tie');
+const player1Solo = document.getElementById('player1Solo');
 let count = 0;
 let Score1 = 0;
 let Score2 = 0;
 let alienWidth = 64;
 let alienHeight = 55;
+let gameEnd = false;
+let players;
 
 let key = { up: false, left: false, right: false, down: false };
 let bad = { up: false, left: false, right: false, down: false };
@@ -75,7 +81,10 @@ class Ball extends Shape {
         if ((this.y - this.size) <= 0) {
             this.y = (height - this.size + 1);
         }
-
+        if (this.velX === 0 || this.velY === 0){
+            this.velX = 1;
+            this.velY = 1;
+        }
         this.x += this.velX;
         this.y += this.velY;
     };
@@ -280,7 +289,7 @@ class badCircle extends Shape {
 
 const balls = [];
 
-while (balls.length < 25) {
+while (balls.length < 30) {
     const size = random(10, 20);
     let ball = new Ball(
         // ball position always drawn at least one ball width
@@ -301,6 +310,22 @@ while (balls.length < 25) {
 }
 
 // define loop that keeps drawing the scene constantly
+function getPlayers() {
+   players  =  window.prompt("Greetings Commander! 1 or 2 Players? Default will be 1 Player.","1");
+    if (players === "2"){
+        let evil = new EvilCircle(random(0, width), random(0, height), true, 1);
+        evil.setControls();
+        let badGuy = new badCircle(random(0, width), random(0, height), true, 1);
+        badGuy.setControls();
+    }
+    else {
+        let evil = new EvilCircle(random(0, width), random(0, height), true, 1);
+        evil.setControls(); 
+    }
+}
+
+
+getPlayers();
 
 let evil = new EvilCircle(random(0, width), random(0, height), true, 1);
 evil.setControls();
@@ -319,18 +344,44 @@ function loop() {
             balls[i].collisionDetect();
         }
     }
+    if (players === "2"){
+        evil.draw();
+        badGuy.draw();
+        evil.setControls();
+        badGuy.setControls();
+        evil.checkBounds();
+        badGuy.checkBounds();
+        evil.collisionDetect();
+        badGuy.collisionDetect();
+    }
+    else{
+        evil.draw(); 
+        evil.setControls();
+        evil.checkBounds();
+        evil.collisionDetect();
+    }
 
-    evil.draw();
-    badGuy.draw();
-    evil.setControls();
-    badGuy.setControls();
-    evil.checkBounds();
-    badGuy.checkBounds();
-    evil.collisionDetect();
-    badGuy.collisionDetect();
-
+    if (count === 0 && gameEnd === false){
+        if (players === "2"){
+            if (Score1 > Score2){
+                player1Win.style.display = "block";
+            }
+            else if (Score2 > Score1){
+                player2Win.style.display = "block";
+            }
+            else{
+                tie.style.display = "block";
+            }
+        }
+        else {
+            player1Solo.style.display = "block";
+        }
+        gameEnd = true;
+    }
     requestAnimationFrame(loop);
+    
 }
+
 
 window.onkeydown = function (e) {
     if (e.keyCode == 65) { key.left = true; } //LEFT
@@ -353,5 +404,4 @@ window.onkeyup = function (e) {
     if (e.keyCode == 40) { bad.down = false;}
     if (e.keyCode == 39) { bad.right = false;}
 };
-
 loop();
